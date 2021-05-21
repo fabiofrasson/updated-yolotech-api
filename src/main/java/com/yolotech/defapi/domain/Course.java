@@ -52,10 +52,22 @@ public class Course implements Serializable {
   private boolean edited;
   private boolean active;
 
-  public Course() {
-  }
+  public Course() {}
 
-  public Course(Long id, String name, String description, String instructor, com.yolotech.defapi.domain.Account user, String site, Double price, Double length, String slug, LocalDateTime regDate, CourseStatus courseStatus, boolean edited, boolean active) {
+  public Course(
+      Long id,
+      String name,
+      String description,
+      String instructor,
+      com.yolotech.defapi.domain.Account user,
+      String site,
+      Double price,
+      Double length,
+      String slug,
+      LocalDateTime regDate,
+      CourseStatus courseStatus,
+      boolean edited,
+      boolean active) {
     this.id = id;
     this.name = name;
     this.description = description;

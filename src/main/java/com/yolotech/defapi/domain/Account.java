@@ -1,8 +1,8 @@
 package com.yolotech.defapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yolotech.defapi.domain.enums.AccRole;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,19 +27,17 @@ public class Account implements Serializable {
   private String github;
   private String linkedIn;
   private String passwd;
-  private Integer accRole;
+
+  @Enumerated(EnumType.STRING)
+  private AccRole accRole = AccRole.STUDENT;
 
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   private List<Course> courseList = new ArrayList<>();
 
-  @JsonFormat(
-      shape = JsonFormat.Shape.STRING,
-      pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",
-      timezone = "GMT")
-  private LocalDateTime regDate;
-  // **** Testar o LocalDateTime.now() na hora de instanciar o objeto **** //
+  @CreationTimestamp private LocalDateTime regDate;
 
+  @Column(name = "active", columnDefinition = "boolean default true")
   private boolean active;
 
   public Account() {}
@@ -55,7 +53,6 @@ public class Account implements Serializable {
       String linkedIn,
       String passwd,
       AccRole accRole,
-      LocalDateTime regDate,
       boolean active) {
     this.id = id;
     this.fullName = fullName;
@@ -66,8 +63,7 @@ public class Account implements Serializable {
     this.github = github;
     this.linkedIn = linkedIn;
     this.passwd = passwd;
-    setAccRole(accRole);
-    this.regDate = regDate;
+    this.accRole = accRole;
     this.active = active;
   }
 
@@ -144,13 +140,11 @@ public class Account implements Serializable {
   }
 
   public AccRole getAccRole() {
-    return AccRole.valueOf(accRole);
+    return accRole;
   }
 
   public void setAccRole(AccRole accRole) {
-    if (accRole != null) {
-      this.accRole = accRole.getCode();
-    }
+    this.accRole = accRole;
   }
 
   public List<Course> getCourseList() {
