@@ -37,10 +37,33 @@ public class Account implements Serializable {
 
   @CreationTimestamp private LocalDateTime regDate;
 
-  @Column(name = "active", columnDefinition = "boolean default true")
+  @Column(
+      name = "active",
+      insertable = false,
+      nullable = false,
+      columnDefinition = "boolean default true")
   private boolean active;
 
   public Account() {}
+
+  public Account(
+      String fullName,
+      String title,
+      String contact,
+      String username,
+      String bio,
+      String github,
+      String linkedIn,
+      String passwd) {
+    this.fullName = fullName;
+    this.title = title;
+    this.contact = contact;
+    this.username = username;
+    this.bio = bio;
+    this.github = github;
+    this.linkedIn = linkedIn;
+    this.passwd = passwd;
+  }
 
   public Account(
       Long id,
@@ -52,8 +75,7 @@ public class Account implements Serializable {
       String github,
       String linkedIn,
       String passwd,
-      AccRole accRole,
-      boolean active) {
+      AccRole accRole) {
     this.id = id;
     this.fullName = fullName;
     this.title = title;
@@ -64,7 +86,6 @@ public class Account implements Serializable {
     this.linkedIn = linkedIn;
     this.passwd = passwd;
     this.accRole = accRole;
-    this.active = active;
   }
 
   public Long getId() {

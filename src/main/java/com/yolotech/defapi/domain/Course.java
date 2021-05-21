@@ -1,8 +1,9 @@
 package com.yolotech.defapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yolotech.defapi.domain.enums.CourseStatus;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,16 +41,23 @@ public class Course implements Serializable {
   private Double length;
   private String slug;
 
-  @JsonFormat(
-      shape = JsonFormat.Shape.STRING,
-      pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",
-      timezone = "GMT")
-  private LocalDateTime regDate;
-  // **** Testar o LocalDateTime.now() na hora de instanciar o objeto **** //
+  @CreationTimestamp private LocalDateTime regDate;
 
-  private Integer courseStatus;
+  @Enumerated(EnumType.STRING)
+  private CourseStatus courseStatus;
 
+  @Column(
+      name = "edited",
+      nullable = false,
+      insertable = false,
+      columnDefinition = "boolean default false")
   private boolean edited;
+
+  @Column(
+      name = "active",
+      insertable = false,
+          nullable = false,
+      columnDefinition = "boolean default true")
   private boolean active;
 
   public Course() {}
@@ -64,10 +72,7 @@ public class Course implements Serializable {
       Double price,
       Double length,
       String slug,
-      LocalDateTime regDate,
-      CourseStatus courseStatus,
-      boolean edited,
-      boolean active) {
+      CourseStatus courseStatus) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -77,10 +82,7 @@ public class Course implements Serializable {
     this.price = price;
     this.length = length;
     this.slug = slug;
-    this.regDate = regDate;
-    setCourseStatus(courseStatus);
-    this.edited = edited;
-    this.active = active;
+    this.courseStatus = courseStatus;
   }
 
   public Long getId() {
@@ -168,13 +170,11 @@ public class Course implements Serializable {
   }
 
   public CourseStatus getCourseStatus() {
-    return CourseStatus.valueOf(courseStatus);
+    return courseStatus;
   }
 
   public void setCourseStatus(CourseStatus courseStatus) {
-    if (courseStatus != null) {
-      this.courseStatus = courseStatus.getCode();
-    }
+    this.courseStatus = courseStatus;
   }
 
   public boolean isEdited() {

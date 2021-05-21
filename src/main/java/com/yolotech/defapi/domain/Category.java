@@ -14,7 +14,11 @@ public class Category implements Serializable {
 
   private String name;
 
-  @Column(name = "active", columnDefinition = "boolean default true")
+  @Column(
+      name = "active",
+      insertable = false,
+      nullable = false,
+      columnDefinition = "boolean default true")
   private boolean active = true;
 
   public Category() {}
