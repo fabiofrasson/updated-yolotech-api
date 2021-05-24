@@ -1,6 +1,7 @@
 package com.yolotech.defapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yolotech.defapi.domain.enums.AccRole;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,19 +30,23 @@ public class Account implements Serializable {
   private String passwd;
 
   @Enumerated(EnumType.STRING)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private AccRole accRole = AccRole.STUDENT;
 
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   private List<Course> courseList = new ArrayList<>();
 
-  @CreationTimestamp private LocalDateTime regDate;
+  @CreationTimestamp
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private LocalDateTime regDate;
 
   @Column(
       name = "active",
       insertable = false,
       nullable = false,
       columnDefinition = "boolean default true")
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private boolean active;
 
   public Account() {}
