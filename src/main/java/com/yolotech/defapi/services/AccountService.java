@@ -42,6 +42,9 @@ public class AccountService {
     Account savedAccount = findByIdOrThrowBadRequestException(accountDTOPut.getId());
     Account account = AccountMapper.INSTANCE.toAccount(accountDTOPut);
     account.setId(savedAccount.getId());
+    account.setRegDate(savedAccount.getRegDate());
+    account.setActive(savedAccount.isActive());
+    account.setAccRole(savedAccount.getAccRole());
     accountRepository.save(account);
   }
 }

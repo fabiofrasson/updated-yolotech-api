@@ -38,6 +38,10 @@ public class CourseService {
         Course savedCourse = findByIdOrThrowBadRequestException(courseDTOPut.getId());
         Course course = CourseMapper.INSTANCE.toCourse(courseDTOPut);
         course.setId(savedCourse.getId());
+        course.setRegDate(savedCourse.getRegDate());
+        course.setCourseStatus(savedCourse.getCourseStatus());
+        course.setEdited(true);
+        course.setActive(savedCourse.isActive());
         courseRepository.save(course);
     }
 }
