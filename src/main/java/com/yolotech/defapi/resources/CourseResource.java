@@ -1,8 +1,6 @@
 package com.yolotech.defapi.resources;
 
-import com.yolotech.defapi.domain.Category;
 import com.yolotech.defapi.domain.Course;
-import com.yolotech.defapi.dto.course.CourseDTOCategoryList;
 import com.yolotech.defapi.dto.course.CourseDTOPost;
 import com.yolotech.defapi.dto.course.CourseDTOPut;
 import com.yolotech.defapi.services.CourseService;
@@ -50,12 +48,6 @@ public class CourseResource {
     @PutMapping
     public ResponseEntity<Void> replace(@RequestBody CourseDTOPut courseDTOPut) {
         courseService.replace(courseDTOPut);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PutMapping(path = "categories")
-    public ResponseEntity<Void> addCategory(@RequestBody CourseDTOCategoryList courseDTOCategoryList) {
-        courseService.addCategory(courseDTOCategoryList);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,7 +1,5 @@
 package com.yolotech.defapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -21,7 +19,6 @@ public class Category implements Serializable {
       insertable = false,
       nullable = false,
       columnDefinition = "boolean default true")
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private boolean active = true;
 
   public Category() {}
