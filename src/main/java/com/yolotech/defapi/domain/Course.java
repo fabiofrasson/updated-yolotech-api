@@ -2,7 +2,6 @@ package com.yolotech.defapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yolotech.defapi.domain.enums.CourseStatus;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -56,7 +55,7 @@ public class Course implements Serializable {
   @Column(
       name = "active",
       insertable = false,
-          nullable = false,
+      nullable = false,
       columnDefinition = "boolean default true")
   private boolean active;
 

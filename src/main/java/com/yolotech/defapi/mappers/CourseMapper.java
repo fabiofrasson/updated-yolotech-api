@@ -9,9 +9,9 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public abstract class CourseMapper {
 
-    public static final CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
+  public static final CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
 
-    public abstract Course toCourse(CourseDTOPost courseDTOPost);
+  public abstract Course toCourse(CourseDTOPost courseDTOPost);
 
-    public abstract Course toCourse(CourseDTOPut courseDTOPut);
+  public abstract Course toCourse(CourseDTOPut courseDTOPut);
 }

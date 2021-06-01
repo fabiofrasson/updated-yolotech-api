@@ -17,18 +17,18 @@ public class SpringFoxConfig {
   public Docket swagger() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-          .apis(RequestHandlerSelectors.basePackage("com.yolotech.defapi.resources"))
-          .paths(PathSelectors.any())
-          .build()
+        .apis(RequestHandlerSelectors.basePackage("com.yolotech.defapi.resources"))
+        .paths(PathSelectors.any())
+        .build()
         .apiInfo(metaData());
   }
 
   private ApiInfo metaData() {
     return new ApiInfoBuilder()
-            .title("YoloTech API")
-            .description("Welcome to YoloTech API!")
-            .version("1.0")
-            .contact(new Contact("YoloTech", "http://www.yolotech.com", "contact@yolotech.com"))
-            .build();
+        .title("YoloTech API")
+        .description("Welcome to YoloTech API!")
+        .version("1.0")
+        .contact(new Contact("YoloTech", "http://www.yolotech.com", "contact@yolotech.com"))
+        .build();
   }
 }

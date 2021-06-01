@@ -100,30 +100,30 @@ public class Instantiation implements CommandLineRunner {
             CourseStatus.APPROVED);
 
     Course course1 =
-            new Course(
-                    null,
-                    "Back-End completo",
-                    "Curso completo de Back-End",
-                    "José Pereira",
-                    account1,
-                    "https://www.backendcompleto.com.br",
-                    150.0,
-                    50.0,
-                    "backend-completo",
-                    CourseStatus.PENDING);
+        new Course(
+            null,
+            "Back-End completo",
+            "Curso completo de Back-End",
+            "José Pereira",
+            account1,
+            "https://www.backendcompleto.com.br",
+            150.0,
+            50.0,
+            "backend-completo",
+            CourseStatus.PENDING);
 
     Course course2 =
-            new Course(
-                    null,
-                    "UX completo",
-                    "Curso completo de UX",
-                    "José Pereira",
-                    account1,
-                    "https://www.uxcompleto.com.br",
-                    200.0,
-                    75.0,
-                    "ux-completo",
-                    CourseStatus.REJECTED);
+        new Course(
+            null,
+            "UX completo",
+            "Curso completo de UX",
+            "José Pereira",
+            account1,
+            "https://www.uxcompleto.com.br",
+            200.0,
+            75.0,
+            "ux-completo",
+            CourseStatus.REJECTED);
 
     courseRepository.saveAll(Arrays.asList(course, course1, course2));
   }

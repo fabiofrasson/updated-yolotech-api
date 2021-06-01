@@ -16,32 +16,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
 
-    private final CourseRepository courseRepository;
+  private final CourseRepository courseRepository;
 
-    public List<Course> listAll() { return courseRepository.findAll(); }
+  public List<Course> listAll() {
+    return courseRepository.findAll();
+  }
 
-    public Course findByIdOrThrowBadRequestException(Long id) {
-        return courseRepository.findById(id).orElseThrow(() -> new BadRequestException("Course not found. Please try again."));
-    }
+  public Course findByIdOrThrowBadRequestException(Long id) {
+    return courseRepository
+        .findById(id)
+        .orElseThrow(() -> new BadRequestException("Course not found. Please try again."));
+  }
 
-    @Transactional
-    public Course save(CourseDTOPost courseDTOPost) {
-        return courseRepository.save(CourseMapper.INSTANCE.toCourse(courseDTOPost));
-    }
+  @Transactional
+  public Course save(CourseDTOPost courseDTOPost) {
+    return courseRepository.save(CourseMapper.INSTANCE.toCourse(courseDTOPost));
+  }
 
-    public void delete(Long id) {
-        courseRepository.delete(findByIdOrThrowBadRequestException(id));
-    }
+  public void delete(Long id) {
+    courseRepository.delete(findByIdOrThrowBadRequestException(id));
+  }
 
-    @Transactional
-    public void replace(CourseDTOPut courseDTOPut) {
-        Course savedCourse = findByIdOrThrowBadRequestException(courseDTOPut.getId());
-        Course course = CourseMapper.INSTANCE.toCourse(courseDTOPut);
-        course.setId(savedCourse.getId());
-        course.setRegDate(savedCourse.getRegDate());
-        course.setCourseStatus(savedCourse.getCourseStatus());
-        course.setEdited(true);
-        course.setActive(savedCourse.isActive());
-        courseRepository.save(course);
-    }
+  @Transactional
+  public void replace(CourseDTOPut courseDTOPut) {
+    Course savedCourse = findByIdOrThrowBadRequestException(courseDTOPut.getId());
+    Course course = CourseMapper.INSTANCE.toCourse(courseDTOPut);
+    course.setId(savedCourse.getId());
+    course.setRegDate(savedCourse.getRegDate());
+    course.setCourseStatus(savedCourse.getCourseStatus());
+    course.setEdited(true);
+    course.setActive(savedCourse.isActive());
+    courseRepository.save(course);
+  }
 }
