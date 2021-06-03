@@ -1,6 +1,7 @@
 package com.yolotech.defapi.mappers;
 
 import com.yolotech.defapi.domain.Course;
+import com.yolotech.defapi.dto.course.CourseDTOCategoryList;
 import com.yolotech.defapi.dto.course.CourseDTOPost;
 import com.yolotech.defapi.dto.course.CourseDTOPut;
 import org.mapstruct.Mapper;
@@ -14,4 +15,6 @@ public abstract class CourseMapper {
     public abstract Course toCourse(CourseDTOPost courseDTOPost);
 
     public abstract Course toCourse(CourseDTOPut courseDTOPut);
+
+    public abstract Course toCourse(CourseDTOCategoryList courseDTOCategoryList);
 }

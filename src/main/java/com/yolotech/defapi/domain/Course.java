@@ -1,6 +1,7 @@
 package com.yolotech.defapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yolotech.defapi.domain.enums.CourseStatus;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,9 +42,12 @@ public class Course implements Serializable {
   private Double length;
   private String slug;
 
-  @CreationTimestamp private LocalDateTime regDate;
+  @CreationTimestamp
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private LocalDateTime regDate;
 
   @Enumerated(EnumType.STRING)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private CourseStatus courseStatus;
 
   @Column(
@@ -51,6 +55,7 @@ public class Course implements Serializable {
       nullable = false,
       insertable = false,
       columnDefinition = "boolean default false")
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private boolean edited;
 
   @Column(
@@ -58,6 +63,7 @@ public class Course implements Serializable {
       insertable = false,
           nullable = false,
       columnDefinition = "boolean default true")
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private boolean active;
 
   public Course() {}
