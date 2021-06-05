@@ -12,59 +12,68 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
 
-    private final CourseRepository courseRepository;
+  private final CourseRepository courseRepository;
 
-    public List<Course> listAll() { return courseRepository.findAll(); }
+//  public List<Course> listAll() {
+//    return courseRepository.findAll();
+//  }
 
-    public Course findByIdOrThrowBadRequestException(Long id) {
-        return courseRepository.findById(id).orElseThrow(() -> new BadRequestException("Course not found. Please try again."));
+  public List<CourseDTOPost> getAll() {
+    return courseRepository.findAll().stream().map(CourseDTOPost::create).collect(Collectors.toList());
+  }
+
+  public Course findByIdOrThrowBadRequestException(Long id) {
+    return courseRepository
+        .findById(id)
+        .orElseThrow(() -> new BadRequestException("Course not found. Please try again."));
+  }
+
+  @Transactional
+  public Course save(CourseDTOPost courseDTOPost) {
+    return courseRepository.save(CourseMapper.INSTANCE.toCourse(courseDTOPost));
+  }
+
+  public void delete(Long id) {
+    courseRepository.delete(findByIdOrThrowBadRequestException(id));
+  }
+
+  @Transactional
+  public void replace(CourseDTOPut courseDTOPut) {
+    Course savedCourse = findByIdOrThrowBadRequestException(courseDTOPut.getId());
+    Course course = CourseMapper.INSTANCE.toCourse(courseDTOPut);
+    course.setId(savedCourse.getId());
+    course.setRegDate(savedCourse.getRegDate());
+    course.setCourseStatus(savedCourse.getCourseStatus());
+    course.setEdited(true);
+    course.setActive(savedCourse.isActive());
+    courseRepository.save(course);
+  }
+
+  public void addCategory(CourseDTOCategoryList courseDTOCategoryList) {
+    Course savedCourse = findByIdOrThrowBadRequestException(courseDTOCategoryList.getId());
+    Course course = CourseMapper.INSTANCE.toCourse(courseDTOCategoryList);
+    course.setName(savedCourse.getName());
+    course.setDescription(savedCourse.getDescription());
+    course.setInstructor(savedCourse.getInstructor());
+    course.setSite(savedCourse.getSite());
+    course.setPrice(savedCourse.getPrice());
+    course.setLength(savedCourse.getLength());
+    course.setSlug(savedCourse.getSlug());
+    course.setRegDate(savedCourse.getRegDate());
+    course.setCourseStatus(savedCourse.getCourseStatus());
+    if (!course.isEdited()) {
+      course.setEdited(true);
+    } else {
+      course.setEdited(savedCourse.isEdited());
     }
-
-    @Transactional
-    public Course save(CourseDTOPost courseDTOPost) {
-        return courseRepository.save(CourseMapper.INSTANCE.toCourse(courseDTOPost));
-    }
-
-    public void delete(Long id) {
-        courseRepository.delete(findByIdOrThrowBadRequestException(id));
-    }
-
-    @Transactional
-    public void replace(CourseDTOPut courseDTOPut) {
-        Course savedCourse = findByIdOrThrowBadRequestException(courseDTOPut.getId());
-        Course course = CourseMapper.INSTANCE.toCourse(courseDTOPut);
-        course.setId(savedCourse.getId());
-        course.setRegDate(savedCourse.getRegDate());
-        course.setCourseStatus(savedCourse.getCourseStatus());
-        course.setEdited(true);
-        course.setActive(savedCourse.isActive());
-        courseRepository.save(course);
-    }
-
-    public void addCategory(CourseDTOCategoryList courseDTOCategoryList) {
-        Course savedCourse = findByIdOrThrowBadRequestException(courseDTOCategoryList.getId());
-        Course course = CourseMapper.INSTANCE.toCourse(courseDTOCategoryList);
-        course.setName(savedCourse.getName());
-        course.setDescription(savedCourse.getDescription());
-        course.setInstructor(savedCourse.getInstructor());
-        course.setSite(savedCourse.getSite());
-        course.setPrice(savedCourse.getPrice());
-        course.setLength(savedCourse.getLength());
-        course.setSlug(savedCourse.getSlug());
-        course.setRegDate(savedCourse.getRegDate());
-        course.setCourseStatus(savedCourse.getCourseStatus());
-        if(!course.isEdited()) {
-            course.setEdited(true);
-        } else {
-            course.setEdited(savedCourse.isEdited());
-        }
-        course.setActive(savedCourse.isActive());
-        course.getCategoryList().addAll(savedCourse.getCategoryList());
-        courseRepository.save(course);
-    }
+    course.setActive(savedCourse.isActive());
+    course.getCategoryList().addAll(savedCourse.getCategoryList());
+    courseRepository.save(course);
+  }
 }
