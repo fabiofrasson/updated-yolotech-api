@@ -4,7 +4,6 @@ import com.yolotech.defapi.domain.Account;
 import com.yolotech.defapi.domain.Category;
 import com.yolotech.defapi.domain.Course;
 import com.yolotech.defapi.domain.Role;
-import com.yolotech.defapi.domain.enums.AccRole;
 import com.yolotech.defapi.domain.enums.CourseStatus;
 import com.yolotech.defapi.repositories.AccountRepository;
 import com.yolotech.defapi.repositories.CategoryRepository;
@@ -37,9 +36,9 @@ public class Instantiation implements CommandLineRunner {
   public void run(String... args) throws Exception {
 
     roleRepository.deleteAll();
-    Role role = new Role(null, "ROLE_USER");
-    Role role1 = new Role(null, "ROLE_ADMIN");
-    Role role2 = new Role(null, "ROLE_COMPANYADMIN");
+    Role role = new Role(1L, "ROLE_USER");
+    Role role1 = new Role(2L, "ROLE_ADMIN");
+    Role role2 = new Role(3L, "ROLE_COMPANYADMIN");
     roleRepository.saveAll(Arrays.asList(role, role1, role2));
 
     categoryRepository.deleteAll();
@@ -65,8 +64,7 @@ public class Instantiation implements CommandLineRunner {
             "Bio test",
             "https://github.com/fabiofrasson",
             "https://www.linkedin.com/in/fabiofrasson/",
-            encoder.encode("123456"),
-            AccRole.ADMIN);
+            encoder.encode("123456"));
 
     accountRepository.save(account);
 
@@ -80,8 +78,7 @@ public class Instantiation implements CommandLineRunner {
             "Bio test",
             "https://github.com/wilbueno",
             "https://www.linkedin.com/in/wilbueno/",
-            encoder.encode("123456"),
-            AccRole.COMPANYADMIN);
+            encoder.encode("123456"));
     accountRepository.save(account1);
 
     Account account2 =
@@ -94,8 +91,7 @@ public class Instantiation implements CommandLineRunner {
             "Bio test",
             "https://github.com/kenbueno",
             "https://www.linkedin.com/in/kenbueno/",
-            encoder.encode("123456"),
-            AccRole.STUDENT);
+            encoder.encode("123456"));
     accountRepository.save(account2);
 
     courseRepository.deleteAll();

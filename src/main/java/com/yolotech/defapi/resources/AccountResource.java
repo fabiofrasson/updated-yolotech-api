@@ -27,7 +27,7 @@ public class AccountResource {
   private final AccountService accountService;
 
   @GetMapping
-//  @Secured({"ROLE_ADMIN"})
+  @Secured({"ROLE_ADMIN"})
   @ApiOperation(value = "Return a list with all Accounts", response = Account.class)
   public ResponseEntity<List<Account>> list() {
     log.info(dateUtil.formatLocalDateTimetoDatabaseStyle(LocalDateTime.now()));
@@ -35,18 +35,21 @@ public class AccountResource {
   }
 
   @GetMapping(path = "/{id}")
+  @Secured({"ROLE_ADMIN"})
   @ApiOperation(value = "Perform a search by Id within Accounts List", response = Account.class)
   public ResponseEntity<Account> findById(@PathVariable Long id) {
     return ResponseEntity.ok(accountService.findByIdOrThrowBadRequestException(id));
   }
 
   @PostMapping
+  @Secured({"ROLE_ADMIN"})
   @ApiOperation(value = "Add an Account to Accounts List")
   public ResponseEntity<Account> save(@RequestBody @Valid AccountDTOPost accountDTOPost) {
     return new ResponseEntity<>(accountService.save(accountDTOPost), HttpStatus.CREATED);
   }
 
   @DeleteMapping(path = "/{id}")
+  @Secured({"ROLE_ADMIN"})
   @ApiOperation(value = "Account deletion by Id")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     accountService.delete(id);
@@ -54,6 +57,7 @@ public class AccountResource {
   }
 
   @PutMapping
+  @Secured({"ROLE_ADMIN"})
   @ApiOperation(value = "Return a list with all Accounts")
   public ResponseEntity<Void> replace(@RequestBody AccountDTOPut accountDTOPut) {
     accountService.replace(accountDTOPut);

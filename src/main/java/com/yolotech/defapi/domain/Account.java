@@ -3,15 +3,18 @@ package com.yolotech.defapi.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class Account implements Serializable {
+public class Account implements Serializable, UserDetails {
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -55,6 +58,27 @@ public class Account implements Serializable {
   private List<Role> roles;
 
   public Account() {}
+
+  public Account(
+      Long id,
+      String fullName,
+      String title,
+      String contact,
+      String username,
+      String bio,
+      String github,
+      String linkedIn,
+      String passwd) {
+    this.id = id;
+    this.fullName = fullName;
+    this.title = title;
+    this.contact = contact;
+    this.username = username;
+    this.bio = bio;
+    this.github = github;
+    this.linkedIn = linkedIn;
+    this.passwd = passwd;
+  }
 
   public Account(
       Long id,
@@ -113,8 +137,38 @@ public class Account implements Serializable {
     this.contact = contact;
   }
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return roles;
+  }
+
+  @Override
+  public String getPassword() {
+    return passwd;
+  }
+
   public String getUsername() {
     return username;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
   }
 
   public void setUsername(String username) {
@@ -153,8 +207,8 @@ public class Account implements Serializable {
     this.passwd = passwd;
   }
 
-  public void setCourseList(List<Course> courseList) {
-    this.courseList = courseList;
+  public List<Course> getCourseList() {
+    return courseList;
   }
 
   public LocalDateTime getRegDate() {
@@ -173,7 +227,7 @@ public class Account implements Serializable {
     this.active = active;
   }
 
-  public void setRoles(List<Role> roles) {
-    this.roles = roles;
+  public List<Role> getRoles() {
+    return roles;
   }
 }
