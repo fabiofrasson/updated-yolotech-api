@@ -2,7 +2,6 @@ package com.yolotech.defapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yolotech.defapi.domain.enums.AccRole;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Account implements Serializable {
@@ -29,9 +27,9 @@ public class Account implements Serializable {
   private String linkedIn;
   private String passwd;
 
-  @Enumerated(EnumType.STRING)
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private AccRole accRole = AccRole.STUDENT;
+  //  @Enumerated(EnumType.STRING)
+  //  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  //  private AccRole accRole = AccRole.STUDENT;
 
   @JsonIgnore
   @OneToMany(mappedBy = "user")
@@ -49,26 +47,14 @@ public class Account implements Serializable {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private boolean active;
 
-  public Account() {}
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "user_roles",
+      joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+  private List<Role> roles;
 
-  public Account(
-      String fullName,
-      String title,
-      String contact,
-      String username,
-      String bio,
-      String github,
-      String linkedIn,
-      String passwd) {
-    this.fullName = fullName;
-    this.title = title;
-    this.contact = contact;
-    this.username = username;
-    this.bio = bio;
-    this.github = github;
-    this.linkedIn = linkedIn;
-    this.passwd = passwd;
-  }
+  public Account() {}
 
   public Account(
       Long id,
@@ -80,7 +66,8 @@ public class Account implements Serializable {
       String github,
       String linkedIn,
       String passwd,
-      AccRole accRole) {
+      LocalDateTime regDate,
+      boolean active) {
     this.id = id;
     this.fullName = fullName;
     this.title = title;
@@ -90,7 +77,8 @@ public class Account implements Serializable {
     this.github = github;
     this.linkedIn = linkedIn;
     this.passwd = passwd;
-    this.accRole = accRole;
+    this.regDate = regDate;
+    this.active = active;
   }
 
   public Long getId() {
@@ -165,16 +153,8 @@ public class Account implements Serializable {
     this.passwd = passwd;
   }
 
-  public AccRole getAccRole() {
-    return accRole;
-  }
-
-  public void setAccRole(AccRole accRole) {
-    this.accRole = accRole;
-  }
-
-  public List<Course> getCourseList() {
-    return courseList;
+  public void setCourseList(List<Course> courseList) {
+    this.courseList = courseList;
   }
 
   public LocalDateTime getRegDate() {
@@ -193,16 +173,7 @@ public class Account implements Serializable {
     this.active = active;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Account account = (Account) o;
-    return Objects.equals(id, account.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
+  public void setRoles(List<Role> roles) {
+    this.roles = roles;
   }
 }

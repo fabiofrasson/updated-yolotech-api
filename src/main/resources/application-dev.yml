@@ -16,3 +16,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/yolotech-updated
     username: postgres
     password: norules261114
+  security:
+    user:
+      name: fabio
+      password: frasson

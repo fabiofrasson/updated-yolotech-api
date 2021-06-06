@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class AccountResource {
   private final AccountService accountService;
 
   @GetMapping
+//  @Secured({"ROLE_ADMIN"})
   @ApiOperation(value = "Return a list with all Accounts", response = Account.class)
   public ResponseEntity<List<Account>> list() {
     log.info(dateUtil.formatLocalDateTimetoDatabaseStyle(LocalDateTime.now()));
