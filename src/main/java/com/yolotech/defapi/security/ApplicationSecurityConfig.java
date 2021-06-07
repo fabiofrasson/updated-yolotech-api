@@ -13,6 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.yolotech.defapi.security.ApplicationUserPermission.*;
 import static com.yolotech.defapi.security.ApplicationUserRole.*;
@@ -34,6 +39,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf()
         .disable()
+        // .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        //            .and()
         // Autorizar requests
         .authorizeRequests()
 
@@ -42,48 +49,48 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
 
         // Autenticação baseada em roles
-//        .antMatchers("/accounts", "/accounts/*")
-//        .hasRole(ADMIN.name())
-//        .antMatchers("/categories", "/categories/*")
-//        .hasRole(ADMIN.name())
-//        .antMatchers("/courses", "/courses/*")
-//        .hasRole(COMPANYADMIN.name())
+        //        .antMatchers("/accounts", "/accounts/*")
+        //        .hasRole(ADMIN.name())
+        //        .antMatchers("/categories", "/categories/*")
+        //        .hasRole(ADMIN.name())
+        //        .antMatchers("/courses", "/courses/*")
+        //        .hasRole(COMPANYADMIN.name())
 
         // Primeira forma de implementar autorização por permissões, via antMatchers
-//        .antMatchers(HttpMethod.POST, "/accounts", "/accounts/**")
-//        .hasAuthority(ACCOUNT_WRITE.getPermission())
-//        .antMatchers(HttpMethod.PUT, "/accounts", "/accounts/**")
-//        .hasAuthority(ACCOUNT_WRITE.getPermission())
-//        .antMatchers(HttpMethod.DELETE, "/accounts", "/accounts/**")
-//        .hasAuthority(ACCOUNT_WRITE.getPermission())
-//        .antMatchers(HttpMethod.POST, "/categories", "/categories/**")
-//        .hasAuthority(CATEGORY_WRITE.getPermission())
-//        .antMatchers(HttpMethod.PUT, "/categories", "/categories/**")
-//        .hasAuthority(CATEGORY_WRITE.getPermission())
-//        .antMatchers(HttpMethod.DELETE, "/categories", "/categories/**")
-//        .hasAuthority(CATEGORY_WRITE.getPermission())
-//        .antMatchers(HttpMethod.POST, "/reviews", "/reviews/**")
-//        .hasAuthority(REVIEW_WRITE.getPermission())
-//        .antMatchers(HttpMethod.PUT, "/reviews", "/reviews/**")
-//        .hasAuthority(REVIEW_WRITE.getPermission())
-//        .antMatchers(HttpMethod.DELETE, "/reviews", "/reviews/**")
-//        .hasAuthority(REVIEW_WRITE.getPermission())
-//        .antMatchers(HttpMethod.POST, "/courses", "/courses/**")
-//        .hasAuthority(COURSE_WRITE.getPermission())
-//        .antMatchers(HttpMethod.POST, "/courses", "/courses/**")
-//        .hasAuthority(COURSE_CATEGORY_WRITE.getPermission())
-//        .antMatchers(HttpMethod.PUT, "/courses", "/courses/**")
-//        .hasAuthority(COURSE_WRITE.getPermission())
-//        .antMatchers(HttpMethod.DELETE, "/courses", "/courses/**")
-//        .hasAuthority(COURSE_WRITE.getPermission())
-//        .antMatchers(HttpMethod.GET, "/courses", "/courses/**")
-//        .hasAnyRole(ADMIN.name(), COMPANYADMIN.name(), STUDENT.name())
-//        .antMatchers(HttpMethod.GET, "/accounts", "/accounts/**")
-//        .hasAuthority(ACCOUNT_READ.getPermission())
-//        .antMatchers(HttpMethod.GET, "/reviews", "/reviews/**")
-//        .hasAnyRole(ADMIN.name(), COMPANYADMIN.name(), STUDENT.name())
-//        .antMatchers(HttpMethod.GET, "/categories", "/categories/**")
-//        .hasAuthority(CATEGORY_READ.getPermission())
+        //        .antMatchers(HttpMethod.POST, "/accounts", "/accounts/**")
+        //        .hasAuthority(ACCOUNT_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.PUT, "/accounts", "/accounts/**")
+        //        .hasAuthority(ACCOUNT_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.DELETE, "/accounts", "/accounts/**")
+        //        .hasAuthority(ACCOUNT_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.POST, "/categories", "/categories/**")
+        //        .hasAuthority(CATEGORY_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.PUT, "/categories", "/categories/**")
+        //        .hasAuthority(CATEGORY_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.DELETE, "/categories", "/categories/**")
+        //        .hasAuthority(CATEGORY_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.POST, "/reviews", "/reviews/**")
+        //        .hasAuthority(REVIEW_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.PUT, "/reviews", "/reviews/**")
+        //        .hasAuthority(REVIEW_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.DELETE, "/reviews", "/reviews/**")
+        //        .hasAuthority(REVIEW_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.POST, "/courses", "/courses/**")
+        //        .hasAuthority(COURSE_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.POST, "/courses", "/courses/**")
+        //        .hasAuthority(COURSE_CATEGORY_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.PUT, "/courses", "/courses/**")
+        //        .hasAuthority(COURSE_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.DELETE, "/courses", "/courses/**")
+        //        .hasAuthority(COURSE_WRITE.getPermission())
+        //        .antMatchers(HttpMethod.GET, "/courses", "/courses/**")
+        //        .hasAnyRole(ADMIN.name(), COMPANYADMIN.name(), STUDENT.name())
+        //        .antMatchers(HttpMethod.GET, "/accounts", "/accounts/**")
+        //        .hasAuthority(ACCOUNT_READ.getPermission())
+        //        .antMatchers(HttpMethod.GET, "/reviews", "/reviews/**")
+        //        .hasAnyRole(ADMIN.name(), COMPANYADMIN.name(), STUDENT.name())
+        //        .antMatchers(HttpMethod.GET, "/categories", "/categories/**")
+        //        .hasAuthority(CATEGORY_READ.getPermission())
 
         // Qualquer request deve ser autenticado
         .anyRequest()
@@ -91,7 +98,32 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
 
         // Mecanismo de autenticação
-        .httpBasic();
+        // .httpBasic()
+        .formLogin()
+        .loginPage("/login")
+        .permitAll()
+        .defaultSuccessUrl("/welcome", true)
+        .passwordParameter("password")
+        .usernameParameter("username")
+        .and()
+        // Ativar a função remember me
+        .rememberMe() // default: 2 weeks
+        // Definir expiração do remember me para 21 dias
+        .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+        // Key para o token remember me
+        .key("A jack of all trades is a master of none, but oftentimes better than a master of one")
+        .rememberMeParameter("remember-me")
+        .and()
+        // Configurações de logout
+        .logout()
+        .logoutUrl("/logout")
+        // É boa prática deixar o método Http como POST quando o CSRF está ligado (padrão do Spring
+        // Security)
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+        .clearAuthentication(true)
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID", "remember-me")
+        .logoutSuccessUrl("/login");
   }
 
   // Buscar infos de users no banco de dados
