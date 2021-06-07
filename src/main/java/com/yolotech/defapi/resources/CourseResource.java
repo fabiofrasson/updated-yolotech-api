@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,37 +42,43 @@ public class CourseResource {
 //  }
 
   @GetMapping
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN', 'ROLE_STUDENT')")
   @ApiOperation(value = "Return a list with all Courses", response = Course.class)
-  public ResponseEntity<List<CourseDTOPost>> list() {
-    return ResponseEntity.ok(courseService.getAll());
+  public ResponseEntity<List<Course>> list() {
+    return ResponseEntity.ok(courseService.listAll());
   }
 
   @GetMapping(path = "/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN', 'ROLE_STUDENT')")
   @ApiOperation(value = "Perform a search by Id within Courses List", response = Course.class)
-  public ResponseEntity<Course> findById(@PathVariable Long id) {
+  public ResponseEntity<Course> findById(@PathVariable("id") Long id) {
     return ResponseEntity.ok(courseService.findByIdOrThrowBadRequestException(id));
   }
 
   @PostMapping
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN')")
   @ApiOperation(value = "Add a Course to Courses List")
   public ResponseEntity<Course> save(@RequestBody @Valid CourseDTOPost courseDTOPost) {
     return new ResponseEntity<>(courseService.save(courseDTOPost), HttpStatus.CREATED);
   }
 
   @DeleteMapping(path = "/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @ApiOperation(value = "Course deletion by Id")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
     courseService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PutMapping
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN')")
   public ResponseEntity<Void> replace(@RequestBody CourseDTOPut courseDTOPut) {
     courseService.replace(courseDTOPut);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PutMapping(path = "categories")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN')")
   public ResponseEntity<Void> addCategory(
       @RequestBody CourseDTOCategoryList courseDTOCategoryList) {
     courseService.addCategory(courseDTOCategoryList);

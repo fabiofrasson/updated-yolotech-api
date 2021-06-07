@@ -5,6 +5,7 @@ public enum ApplicationUserPermission {
     ACCOUNT_WRITE("account:write"),
     COURSE_READ("course:read"),
     COURSE_WRITE("course:write"),
+//    COURSE_CATEGORY_WRITE("course-category:write"),
     CATEGORY_READ("category:read"),
     CATEGORY_WRITE("category:write"),
     REVIEW_READ("review:read"),
@@ -16,7 +17,7 @@ public enum ApplicationUserPermission {
         this.persmission = persmission;
     }
 
-    public String getPersmission() {
+    public String getPermission() {
         return persmission;
     }
 }
