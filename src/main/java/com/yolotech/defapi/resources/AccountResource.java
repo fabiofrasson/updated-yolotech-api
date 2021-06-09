@@ -6,11 +6,11 @@ import com.yolotech.defapi.dto.account.AccountDTOPut;
 import com.yolotech.defapi.services.AccountService;
 import com.yolotech.defapi.util.DateUtil;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +26,7 @@ public class AccountResource {
   private final AccountService accountService;
 
   @GetMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @ApiOperation(value = "Return a list with all Accounts", response = Account.class)
   public ResponseEntity<List<Account>> list() {
     log.info(dateUtil.formatLocalDateTimetoDatabaseStyle(LocalDateTime.now()));
@@ -33,25 +34,29 @@ public class AccountResource {
   }
 
   @GetMapping(path = "/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @ApiOperation(value = "Perform a search by Id within Accounts List", response = Account.class)
-  public ResponseEntity<Account> findById(@PathVariable Long id) {
+  public ResponseEntity<Account> findById(@PathVariable("id") Long id) {
     return ResponseEntity.ok(accountService.findByIdOrThrowBadRequestException(id));
   }
 
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @ApiOperation(value = "Add an Account to Accounts List")
   public ResponseEntity<Account> save(@RequestBody @Valid AccountDTOPost accountDTOPost) {
     return new ResponseEntity<>(accountService.save(accountDTOPost), HttpStatus.CREATED);
   }
 
   @DeleteMapping(path = "/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @ApiOperation(value = "Account deletion by Id")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
     accountService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PutMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @ApiOperation(value = "Return a list with all Accounts")
   public ResponseEntity<Void> replace(@RequestBody AccountDTOPut accountDTOPut) {
     accountService.replace(accountDTOPut);

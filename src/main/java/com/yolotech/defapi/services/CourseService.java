@@ -20,13 +20,13 @@ public class CourseService {
 
   private final CourseRepository courseRepository;
 
-//  public List<Course> listAll() {
-//    return courseRepository.findAll();
-//  }
-
-  public List<CourseDTOPost> getAll() {
-    return courseRepository.findAll().stream().map(CourseDTOPost::create).collect(Collectors.toList());
+  public List<Course> listAll() {
+    return courseRepository.findAll();
   }
+
+//  public List<CourseDTOPost> getAll() {
+//    return courseRepository.findAll().stream().map(CourseDTOPost::create).collect(Collectors.toList());
+//  }
 
   public Course findByIdOrThrowBadRequestException(Long id) {
     return courseRepository
