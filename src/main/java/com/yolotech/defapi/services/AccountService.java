@@ -30,7 +30,15 @@ public class AccountService {
 
   @Transactional
   public Account save(AccountDTOPost accountDTOPost) {
-    return accountRepository.save(AccountMapper.INSTANCE.toAccount(accountDTOPost));
+    Account findAcc = accountRepository.findByUsernameIgnoreCase(accountDTOPost.getUsername());
+    if (findAcc != null) {
+      throw new BadRequestException(
+          "Username "
+              + accountDTOPost.getUsername().toLowerCase()
+              + " is already taken. Please choose another one.");
+    } else {
+      return accountRepository.save(AccountMapper.INSTANCE.toAccount(accountDTOPost));
+    }
   }
 
   public void delete(Long id) {

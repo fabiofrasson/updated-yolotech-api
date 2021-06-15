@@ -30,7 +30,12 @@ public class CategoryService {
 
   @Transactional
   public Category save(CategoryDTOPost categoryDTOPost) {
-    return categoryRepository.save(CategoryMapper.INSTANCE.toCategory(categoryDTOPost));
+    Category findCat = categoryRepository.findCategoryByNameIgnoreCase(categoryDTOPost.getName());
+    if (findCat != null) {
+      throw new BadRequestException("Category " + categoryDTOPost.getName() + " already exists.");
+    } else {
+      return categoryRepository.save(CategoryMapper.INSTANCE.toCategory(categoryDTOPost));
+    }
   }
 
   public void delete(Long id) {

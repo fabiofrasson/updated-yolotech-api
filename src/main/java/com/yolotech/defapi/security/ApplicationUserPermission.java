@@ -11,13 +11,13 @@ public enum ApplicationUserPermission {
     REVIEW_READ("review:read"),
     REVIEW_WRITE("review:write");
 
-    private final String persmission;
+    private final String permission;
 
     ApplicationUserPermission(String persmission) {
-        this.persmission = persmission;
+        this.permission = persmission;
     }
 
     public String getPermission() {
-        return persmission;
+        return permission;
     }
 }

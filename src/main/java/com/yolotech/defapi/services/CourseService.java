@@ -24,9 +24,10 @@ public class CourseService {
     return courseRepository.findAll();
   }
 
-//  public List<CourseDTOPost> getAll() {
-//    return courseRepository.findAll().stream().map(CourseDTOPost::create).collect(Collectors.toList());
-//  }
+  //  public List<CourseDTOPost> getAll() {
+  //    return
+  // courseRepository.findAll().stream().map(CourseDTOPost::create).collect(Collectors.toList());
+  //  }
 
   public Course findByIdOrThrowBadRequestException(Long id) {
     return courseRepository
@@ -36,7 +37,12 @@ public class CourseService {
 
   @Transactional
   public Course save(CourseDTOPost courseDTOPost) {
-    return courseRepository.save(CourseMapper.INSTANCE.toCourse(courseDTOPost));
+    Course findCourse = courseRepository.findCourseByNameIgnoreCase(courseDTOPost.getName());
+    if (findCourse != null) {
+      throw new BadRequestException("Course " + courseDTOPost.getName() + " already exists.");
+    } else {
+      return courseRepository.save(CourseMapper.INSTANCE.toCourse(courseDTOPost));
+    }
   }
 
   public void delete(Long id) {
