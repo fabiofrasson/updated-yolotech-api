@@ -32,24 +32,22 @@ public class CourseResource {
   //    return ResponseEntity.ok(courseService.listAll());
   //  }
 
-//  @GetMapping
-//  @ApiOperation(value = "Return a list with all Courses", response = Course.class)
-//  public ResponseEntity listCourses() {
-//    List<CourseDTOPost> courseDTOPostList = courseService.getAll();
-//    return courseDTOPostList.isEmpty()
-//        ? ResponseEntity.noContent().build()
-//        : ResponseEntity.ok(courseDTOPostList);
-//  }
+  //  @GetMapping
+  //  @ApiOperation(value = "Return a list with all Courses", response = Course.class)
+  //  public ResponseEntity listCourses() {
+  //    List<CourseDTOPost> courseDTOPostList = courseService.getAll();
+  //    return courseDTOPostList.isEmpty()
+  //        ? ResponseEntity.noContent().build()
+  //        : ResponseEntity.ok(courseDTOPostList);
+  //  }
 
   @GetMapping
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN', 'ROLE_STUDENT')")
   @ApiOperation(value = "Return a list with all Courses", response = Course.class)
   public ResponseEntity<List<Course>> list() {
     return ResponseEntity.ok(courseService.listAll());
   }
 
   @GetMapping(path = "/{id}")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANYADMIN', 'ROLE_STUDENT')")
   @ApiOperation(value = "Perform a search by Id within Courses List", response = Course.class)
   public ResponseEntity<Course> findById(@PathVariable("id") Long id) {
     return ResponseEntity.ok(courseService.findByIdOrThrowBadRequestException(id));
