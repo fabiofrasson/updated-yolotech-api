@@ -102,6 +102,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
     source.registerCorsConfiguration("/**", config);
+    config.addExposedHeader("Authorization");
     return new CorsFilter(source);
   }
 
